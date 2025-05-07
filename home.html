@@ -1,30 +1,31 @@
-<!-- Solo contenido -->
-<section id="finance-summary">
-    <div class="summary-box">
-      <h2>Balance Total</h2>
-      <p id="total-balance">€0.00</p>
+<div class="home-container">
+    <div class="summary">
+      <div class="card balance">
+        <h3>Saldo Total</h3>
+        <p id="total-balance">€0.00</p>
+      </div>
+      <div class="card income">
+        <h3>Ingresos</h3>
+        <p id="total-income">€0.00</p>
+      </div>
+      <div class="card expenses">
+        <h3>Gastos</h3>
+        <p id="total-expenses">€0.00</p>
+      </div>
     </div>
-    <div class="summary-box">
-      <h2>Ingresos</h2>
-      <p id="total-income">€0.00</p>
+  
+    <div class="chart-card card">
+      <canvas id="financeChart" height="100"></canvas>
     </div>
-    <div class="summary-box">
-      <h2>Gastos</h2>
-      <p id="total-expenses">€0.00</p>
+  
+    <div class="actions">
+      <button onclick="addIncome()">+ Ingreso</button>
+      <button onclick="addExpense()">- Gasto</button>
     </div>
-  </section>
   
-  <section id="charts">
-    <canvas id="financeChart" width="400" height="400"></canvas>
-  </section>
-  
-  <section id="recent-transactions">
-    <h2>Transacciones Recientes</h2>
-    <ul id="transactions-list"></ul>
-  </section>
-  
-  <section id="add-transaction">
-    <button onclick="addIncome()">Agregar Ingreso</button>
-    <button onclick="addExpense()">Agregar Gasto</button>
-  </section>
+    <div class="transactions card">
+      <h3>Transacciones Recientes</h3>
+      <ul id="transactions-list"></ul>
+    </div>
+  </div>
   

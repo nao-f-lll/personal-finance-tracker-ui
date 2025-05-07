@@ -1,18 +1,26 @@
-// ---------- LOGIN ----------
 function login() {
-    const user = document.getElementById('username').value;
-    const pass = document.getElementById('password').value;
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const user = usernameInput.value.trim();
+    const pass = passwordInput.value;
   
     if (user === 'admin' && pass === '1234') {
       localStorage.setItem('loggedIn', 'true');
       showApp();
     } else {
       alert('Credenciales inválidas');
+  
+      // Limpiar contraseña y volver a enfocar
+      passwordInput.value = '';
+      passwordInput.focus();
+  
+      // NO deshabilitar nada ni tocar el display
     }
   }
   
+  
   function handleSubmit(e) {
-    e.preventDefault(); // evita que se recargue la página
+    e.preventDefault(); 
     login();
   }
   
@@ -22,14 +30,17 @@ function login() {
     navigateTo('home.html');
   }
   
-//   function checkLogin() {
-//     if (localStorage.getItem('loggedIn') === 'true') {
-//       showApp();
-//     } else {
-//       document.getElementById('login-container').style.display = 'flex';
-//       document.getElementById('main-app').style.display = 'none';
-//     }
-//   }
+  function checkLogin() {
+    localStorage.removeItem('loggedIn'); // <-- fuerza logout al iniciar
+  
+    document.getElementById('login-container').style.display = 'flex';
+    document.getElementById('main-app').style.display = 'none';
+  
+    const usernameInput = document.getElementById('username');
+    if (usernameInput) usernameInput.focus();
+  }
+  
+
   
   // ---------- NAVEGACIÓN ENTRE PÁGINAS ----------
   function navigateTo(page) {

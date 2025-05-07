@@ -1,0 +1,71 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px;
+    max-width: 900px;
+    margin: auto;
+  }
+  
+  .summary {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+  }
+  
+  .card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    flex: 1;
+    text-align: center;
+  }
+  
+  .balance {
+    border-left: 5px solid #007bff;
+  }
+  
+  .income {
+    border-left: 5px solid #28a745;
+  }
+  
+  .expenses {
+    border-left: 5px solid #dc3545;
+  }
+  
+  .chart-card {
+    padding: 30px;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+  
+  .actions button {
+    padding: 12px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .actions button:hover {
+    background-color: #0056b3;
+  }
+  
+  .transactions ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+  }
+  
+  .transactions li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
