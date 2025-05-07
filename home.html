@@ -1,0 +1,30 @@
+<!-- Solo contenido -->
+<section id="finance-summary">
+    <div class="summary-box">
+      <h2>Balance Total</h2>
+      <p id="total-balance">€0.00</p>
+    </div>
+    <div class="summary-box">
+      <h2>Ingresos</h2>
+      <p id="total-income">€0.00</p>
+    </div>
+    <div class="summary-box">
+      <h2>Gastos</h2>
+      <p id="total-expenses">€0.00</p>
+    </div>
+  </section>
+  
+  <section id="charts">
+    <canvas id="financeChart" width="400" height="400"></canvas>
+  </section>
+  
+  <section id="recent-transactions">
+    <h2>Transacciones Recientes</h2>
+    <ul id="transactions-list"></ul>
+  </section>
+  
+  <section id="add-transaction">
+    <button onclick="addIncome()">Agregar Ingreso</button>
+    <button onclick="addExpense()">Agregar Gasto</button>
+  </section>
+  

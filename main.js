@@ -3,13 +3,13 @@ const path = require('path');
 
 function createWindow () {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    //fullscreen: false,
+    frame: true,
     webPreferences: {
       preload: path.join(__dirname, 'renderer.js')
     }
   });
-
+  win.maximize();
   win.loadFile('index.html');
 }
 
