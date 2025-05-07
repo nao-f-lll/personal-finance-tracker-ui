@@ -1,7 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head><title>Mi App Electron</title></head>
-  <body>
-    <h1>Hola desde Electron</h1>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title>Mi App Electron</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="content">
+    <h1 id="title">Home</h1>
+  </div>
+
+  <div class="taskbar">
+    <button onclick="navigate('Home')">🏠</button>
+    <button onclick="navigate('Estadísticas')">📊</button>
+    <button onclick="navigate('Perfil')">👤</button>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
 </html>
