@@ -6,14 +6,28 @@
   <title>Perfil - Mi App Electron</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
+    :root {
+      --primary-color: #3a5aff;
+      --secondary-color: #ff4b8a;
+      --tertiary-color: #ffa03a;
+      --background-dark: #1a1f36;
+      --card-bg: #242b47;
+      --text-light: #ffffff;
+      --text-secondary: #a7b0c4;
+      --success-color: #3ce0af;
+      --warning-color: #ffb547;
+      --progress-bg: rgba(255, 255, 255, 0.1);
+      --border-radius: 16px;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      --font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    body {
+      background: #1e293b;
+    }
     #main-app {
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: white;
-      margin: 10px;
-      border-radius: 14px;
-      overflow: hidden;
     }
     #perfil-content {
       flex: 1;
@@ -31,17 +45,19 @@
       font-size: 2rem;
       margin-bottom: 1.25rem;
       text-align: center;
+      color: white;
     }
 
     /* Profile container = single container */
     .profile-container {
-      background: #e0e7ff;
+      background: #212a4b;
       border-radius: 12px;
-      padding: 2rem 1.75rem;
+      padding: 4rem 2.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 1.75rem;
+      margin-bottom: 50px;
     }
 
     /* Profile picture */
@@ -140,6 +156,40 @@
       background: #ebeafe;
     }
 
+    .bottom-navigation {
+      display: flex;
+      justify-content: space-around;
+      background-color: var(--card-bg);
+      padding: 15px 0;
+      border-radius: var(--border-radius);
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 40px);
+      max-width: 500px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 5px 0;
+    }
+
+    .nav-item.active {
+      color: var(--text-light);
+    }
+
+    .nav-item i {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+
   </style>
 </head>
 <body>
@@ -161,11 +211,25 @@
       </div>
     </div>
 
-    <nav class="taskbar" role="navigation" aria-label="Barra de navegación principal">
-      <button id="nav-home" aria-label="Inicio" onclick="navigateTo('home.html')" title="Inicio">🏠</button>
-      <button id="nav-stats" aria-label="Estadísticas" onclick="navigateTo('estadísticas.html')" title="Estadísticas">📊</button>
-      <button id="nav-profile" aria-label="Perfil" onclick="navigateTo('perfil.html')" title="Perfil" class="active">👤</button>
-    </nav>
+    <!-- Navegación inferior -->
+    <div class="bottom-navigation">
+      <div onclick="navigateTo('home.html')" class="nav-item">
+        <div>🏠</div>
+        <span>Dashboard</span>
+      </div>
+      <div class="nav-item">
+        <div>📊</div>
+        <span>Estadísticas</span>
+      </div>
+      <div class="nav-item">
+        <div>🔄</div>
+        <span>Transacciones</span>
+      </div>
+      <div onclick="navigateTo('perfil.html')" class="nav-item active">
+        <div>👤</div>
+        <span>Perfil</span>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -177,36 +241,9 @@
       if (editingProfile) {
         const username = document.getElementById('profile-username').textContent;
         const email = document.getElementById('profile-email').textContent;
-        profileContainer.innerHTML = `
-          <div class="profile-pic-wrapper" aria-hidden="true">👤</div>
-          <form id="profile-form" onsubmit="saveProfile(event)">
-            <div class="profile-info">
-              <label for="edit-username">Usuario:</label>
-              <input id="edit-username" class="profile-input" type="text" value="${username}" required autocomplete="username" />
-              <label for="edit-email">Email:</label>
-              <input id="edit-email" class="profile-input" type="email" value="${email}" required autocomplete="email" />
-            </div>
-            <div class="profile-actions">
-              <button type="submit" class="btn btn-primary">Guardar</button>
-              <button type="button" class="btn btn-secondary" onclick="toggleEdit()">Cancelar</button>
-            </div>
-          </form>
-        `;
       } else {
         const username = document.getElementById('edit-username')?.value || document.getElementById('profile-username').textContent;
         const email = document.getElementById('edit-email')?.value || document.getElementById('profile-email').textContent;
-        profileContainer.innerHTML = `
-          <div class="profile-pic-wrapper" aria-hidden="true">👤</div>
-          <div class="profile-info">
-            <label>Usuario:</label>
-            <span id="profile-username">${username}</span>
-            <label>Email:</label>
-            <span id="profile-email">${email}</span>
-          </div>
-          <div class="profile-actions">
-            <button class="btn btn-primary" id="editButton" onclick="toggleEdit()">Editar Perfil</button>
-          </div>
-        `;
       }
     }
 
