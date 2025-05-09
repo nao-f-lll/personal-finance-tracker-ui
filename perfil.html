@@ -6,17 +6,6 @@
   <title>Perfil - Mi App Electron</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    /* Base and layout */
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f8f9fa;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
     #main-app {
       flex: 1;
       display: flex;
@@ -26,7 +15,7 @@
       border-radius: 14px;
       overflow: hidden;
     }
-    #content {
+    #perfil-content {
       flex: 1;
       padding: 20px 25px;
       overflow-y: auto;
@@ -151,62 +140,11 @@
       background: #ebeafe;
     }
 
-    /* Taskbar fixed full width bottom without shadows */
-    .taskbar {
-      height: 60px;
-      width: 100%;
-      background: #4338ca;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      border-radius: 14px 14px 0 0;
-      box-shadow: none; /* removed shadows */
-      z-index: 1000;
-    }
-    .taskbar button {
-      all: unset;
-      color: white;
-      font-size: 28px;
-      cursor: pointer;
-      user-select: none;
-      padding: 8px 14px;
-      border-radius: 12px;
-      transition: background-color 0.3s ease;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .taskbar button:hover,
-    .taskbar button.active {
-      background-color: #6366f1;
-      color: #e0e7ff;
-    }
-
-    /* Avoid content hidden behind taskbar */
-    #content {
-      padding-bottom: 80px;
-    }
-
-    /* Scrollbar styling */
-    #content::-webkit-scrollbar {
-      width: 8px;
-    }
-    #content::-webkit-scrollbar-track {
-      background: #f3f4f6;
-      border-radius: 12px;
-    }
-    #content::-webkit-scrollbar-thumb {
-      background-color: #6366f1;
-      border-radius: 12px;
-    }
   </style>
 </head>
 <body>
   <div id="main-app">
-    <div id="content" role="main" aria-live="polite" tabindex="-1">
+    <div id="perfil-content" role="main" aria-live="polite" tabindex="-1">
       <h1 id="title">Perfil</h1>
 
       <div class="profile-container" aria-label="Información de perfil de usuario">
