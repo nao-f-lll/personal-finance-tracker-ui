@@ -202,11 +202,14 @@
         <div class="profile-info">
           <label>Usuario:</label>
           <span id="profile-username">UsuarioEjemplo</span>
+          <input type="text" id="edit-username" style="display:none;" />
           <label>Email:</label>
           <span id="profile-email">usuario@ejemplo.com</span>
+          <input type="email" id="edit-email" style="display:none;" />
         </div>
         <div class="profile-actions">
           <button class="btn btn-primary" id="editButton" onclick="toggleEdit()">Editar Perfil</button>
+          <button class="btn btn-success" id="saveButton" onclick="saveProfile(event)" style="display:none;">Guardar</button>
         </div>
       </div>
     </div>
@@ -232,45 +235,61 @@
     </div>
   </div>
 
-  <script>
-    let editingProfile = false;
+<script>
+  let editingProfile = false;
 
-    function toggleEdit() {
-      editingProfile = !editingProfile;
-      const profileContainer = document.querySelector('.profile-container');
-      if (editingProfile) {
-        const username = document.getElementById('profile-username').textContent;
-        const email = document.getElementById('profile-email').textContent;
-      } else {
-        const username = document.getElementById('edit-username')?.value || document.getElementById('profile-username').textContent;
-        const email = document.getElementById('edit-email')?.value || document.getElementById('profile-email').textContent;
-      }
+  function toggleEdit() {
+    editingProfile = !editingProfile;
+    const usernameSpan = document.getElementById('profile-username');
+    const emailSpan = document.getElementById('profile-email');
+    const usernameInput = document.getElementById('edit-username');
+    const emailInput = document.getElementById('edit-email');
+    const saveButton = document.getElementById('saveButton');
+
+    if (editingProfile) {
+      // Switch to edit mode
+      usernameInput.value = usernameSpan.textContent;
+      emailInput.value = emailSpan.textContent;
+      usernameSpan.style.display = 'none';
+      emailSpan.style.display = 'none';
+      usernameInput.style.display = 'inline';
+      emailInput.style.display = 'inline';
+      saveButton.style.display = 'inline';
+      document.getElementById('editButton').textContent = 'Cancelar';
+    } else {
+      // Switch back to view mode
+      usernameSpan.style.display = 'inline';
+      emailSpan.style.display = 'inline';
+      usernameInput.style.display = 'none';
+      emailInput.style.display = 'none';
+      saveButton.style.display = 'none';
+      document.getElementById('editButton').textContent = 'Editar Perfil';
     }
+  }
 
-    function saveProfile(event) {
-      event.preventDefault();
-      const form = event.target;
-      const newUsername = form.querySelector('#edit-username').value.trim();
-      const newEmail = form.querySelector('#edit-email').value.trim();
-      if (newUsername && newEmail && validateEmail(newEmail)) {
-        document.getElementById('profile-username').textContent = newUsername;
-        document.getElementById('profile-email').textContent = newEmail;
-        alert('Perfil actualizado correctamente.');
-        toggleEdit();
-      } else {
-        alert('Por favor, ingrese un nombre y un correo electrónico válidos.');
-      }
+  function saveProfile(event) {
+    event.preventDefault();
+    const newUsername = document.getElementById('edit-username').value.trim();
+    const newEmail = document.getElementById('edit-email').value.trim();
+    if (newUsername && newEmail && validateEmail(newEmail)) {
+      document.getElementById('profile-username').textContent = newUsername;
+      document.getElementById('profile-email').textContent = newEmail;
+      alert('Perfil actualizado correctamente.');
+      toggleEdit();
+    } else {
+      alert('Por favor, ingrese un nombre y un correo electrónico válidos.');
     }
+  }
 
-    function validateEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
 
-    // Highlight active nav button on load
-    window.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.taskbar button').forEach(btn => btn.classList.remove('active'));
-      document.getElementById('nav-profile').classList.add('active');
-    });
-  </script>
+  // Highlight active nav button on load
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.taskbar button').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('nav-profile').classList.add('active');
+  });
+</script>
 </body>
 </html>
