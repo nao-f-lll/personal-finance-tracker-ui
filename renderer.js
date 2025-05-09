@@ -31,13 +31,17 @@ function login() {
   }
   
   function checkLogin() {
-    localStorage.removeItem('loggedIn'); // <-- fuerza logout al iniciar
+    const loggedIn = localStorage.getItem('loggedIn') === 'true';
   
-    document.getElementById('login-container').style.display = 'flex';
-    document.getElementById('main-app').style.display = 'none';
+    if (loggedIn) {
+      showApp();
+    } else {
+      document.getElementById('login-container').style.display = 'flex';
+      document.getElementById('main-app').style.display = 'none';
   
-    const usernameInput = document.getElementById('username');
-    if (usernameInput) usernameInput.focus();
+      const usernameInput = document.getElementById('username');
+      if (usernameInput) usernameInput.focus();
+    }
   }
   
 
