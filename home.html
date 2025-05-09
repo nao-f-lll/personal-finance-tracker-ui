@@ -1,31 +1,934 @@
-<div class="home-container">
-    <div class="summary">
-      <div class="card balance">
-        <h3>Saldo Total</h3>
-        <p id="total-balance">€0.00</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Financiero</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.3.0/luxon.min.js"></script>
+  <style>
+    :root {
+      --primary-color: #3a5aff;
+      --secondary-color: #ff4b8a;
+      --tertiary-color: #ffa03a;
+      --background-dark: #1a1f36;
+      --card-bg: #242b47;
+      --text-light: #ffffff;
+      --text-secondary: #a7b0c4;
+      --success-color: #3ce0af;
+      --warning-color: #ffb547;
+      --progress-bg: rgba(255, 255, 255, 0.1);
+      --border-radius: 16px;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      --font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--background-dark);
+      color: var(--text-light);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    h1, h2, h3, h4 {
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 12px 0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .user-info span {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 15px;
+    }
+
+    .icon-button {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 24px;
+    }
+
+    .nav-tab {
+      padding: 12px 24px;
+      cursor: pointer;
+      position: relative;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .nav-tab.active {
+      color: var(--text-light);
+    }
+
+    .nav-tab.active:after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: var(--primary-color);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      box-shadow: var(--card-shadow);
+      position: relative;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .card-options {
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .spending-card {
+      grid-column: span 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .spending-header {
+      margin-bottom: 12px;
+    }
+
+    .spending-header h3 {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+
+    .spending-header p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .donut-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 220px;
+    }
+
+    .donut-chart {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--tertiary-color) 0% 15%,
+        var(--primary-color) 15% 55%,
+        var(--secondary-color) 55% 100%
+      );
+      position: relative;
+    }
+
+    .donut-chart::before {
+      content: "";
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: var(--card-bg);
+      border-radius: 50%;
+    }
+
+    .donut-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .donut-center .amount {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .donut-center .total {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .spending-categories {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .category-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .category-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .category-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .color-needs { background-color: var(--tertiary-color); }
+    .color-wants { background-color: var(--primary-color); }
+    .color-savings { background-color: var(--secondary-color); }
+
+    .category-name {
+      font-size: 0.9rem;
+    }
+
+    .category-amount {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .cashflow-card {
+      grid-column: span 2;
+    }
+
+    .cashflow-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .cashflow-details {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .cashflow-item h4 {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 400;
+      margin-bottom: 5px;
+    }
+
+    .cashflow-amount {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background-color: var(--progress-bg);
+      border-radius: 3px;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: var(--success-color);
+      border-radius: 3px;
+    }
+
+    .upcoming-bills {
+      grid-column: span 1;
+    }
+
+    .bill-list {
+      margin-top: 10px;
+    }
+
+    .bill-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .bill-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bill-date {
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      background-color: rgba(255, 75, 138, 0.2);
+      border-radius: 12px;
+      color: var(--secondary-color);
+    }
+
+    .bill-name {
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .bill-amount {
+      font-weight: 500;
+    }
+
+    .bill-action {
+      padding: 6px 12px;
+      background-color: rgba(58, 90, 255, 0.2);
+      color: var(--primary-color);
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+    }
+
+    .paid {
+      background-color: rgba(60, 224, 175, 0.2);
+      color: var(--success-color);
+    }
+
+    .crypto-balance {
+      grid-column: span 2;
+    }
+
+    .crypto-amounts {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .crypto-value {
+      font-size: 2rem;
+      font-weight: 600;
+    }
+
+    .crypto-change {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      background-color: rgba(60, 224, 175, 0.2);
+      color: var(--success-color);
+    }
+
+    .crypto-coins {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .crypto-coin {
+      padding: 6px 12px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .investments-card, .loans-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .savings-goal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .goal-progress {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 15px;
+    }
+
+    .goal-circle {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--secondary-color) 0% 70%,
+        rgba(255, 75, 138, 0.2) 70% 100%
+      );
+      position: relative;
+    }
+
+    .goal-circle::before {
+      content: "";
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: var(--card-bg);
+      border-radius: 50%;
+    }
+
+    .goal-amount {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .goal-text {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    .action-button {
+      padding: 12px;
+      border-radius: var(--border-radius);
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      display: block;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .action-button.secondary {
+      background-color: rgba(58, 90, 255, 0.2);
+      color: var(--primary-color);
+    }
+
+    .emoji {
+      font-size: 1.2rem;
+      margin-right: 5px;
+    }
+
+    .habits-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .habit-item {
+      background-color: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .habit-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .habit-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .habit-value {
+      font-weight: 600;
+      color: var(--success-color);
+    }
+
+    .habit-progress {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .habit-bar {
+      flex: 1;
+      height: 6px;
+      background-color: var(--progress-bg);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .habit-fill {
+      height: 100%;
+      background-color: var(--success-color);
+      border-radius: 3px;
+    }
+
+    .habit-details {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .bottom-navigation {
+      display: flex;
+      justify-content: space-around;
+      background-color: var(--card-bg);
+      padding: 15px 0;
+      border-radius: var(--border-radius);
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 40px);
+      max-width: 500px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 5px 0;
+    }
+
+    .nav-item.active {
+      color: var(--text-light);
+    }
+
+    .nav-item i {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+
+    .nav-center-button {
+      width: 50px;
+      height: 50px;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      margin-top: -25px;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      .spending-card, .cashflow-card, .upcoming-bills, .crypto-balance, .investments-card, .loans-card {
+        grid-column: span 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-left">
+        <div class="logo">F</div>
+        <div class="user-info">
+          <h2>Bienvenido de nuevo, Usuario</h2>
+          <span>Plan Intermedio</span>
+        </div>
       </div>
-      <div class="card income">
-        <h3>Ingresos</h3>
-        <p id="total-income">€0.00</p>
-      </div>
-      <div class="card expenses">
-        <h3>Gastos</h3>
-        <p id="total-expenses">€0.00</p>
+      <div class="header-right">
+        <button class="icon-button">🔔</button>
+        <button class="icon-button">⚙️</button>
       </div>
     </div>
-  
-    <div class="chart-card card">
-      <canvas id="financeChart" height="100"></canvas>
+
+    <div class="nav-tabs">
+      <div class="nav-tab">Resumen</div>
+      <div class="nav-tab active">Dashboard</div>
+      <div class="nav-tab">Análisis</div>
+      <div class="nav-tab">Presupuesto</div>
     </div>
-  
-    <div class="actions">
-      <button onclick="addIncome()">+ Ingreso</button>
-      <button onclick="addExpense()">- Gasto</button>
-    </div>
-  
-    <div class="transactions card">
-      <h3>Transacciones Recientes</h3>
-      <ul id="transactions-list"></ul>
+
+    <div class="dashboard-grid">
+      <!-- Tarjeta de Gastos -->
+      <div class="card spending-card">
+        <div class="spending-header">
+          <h3>Mis Gastos de Junio</h3>
+          <p>¡Bien hecho, tu presupuesto está en buen camino! 😊</p>
+        </div>
+        <div class="donut-container">
+          <div class="donut-chart"></div>
+          <div class="donut-center">
+            <div class="amount">€4.200</div>
+            <div class="total">de €5.400</div>
+          </div>
+        </div>
+        <div class="spending-categories">
+          <div class="category-item">
+            <div class="category-info">
+              <div class="category-color color-needs"></div>
+              <div class="category-name">Necesidades</div>
+            </div>
+            <div class="category-amount">€2.500/€3.000</div>
+          </div>
+          <div class="category-item">
+            <div class="category-info">
+              <div class="category-color color-wants"></div>
+              <div class="category-name">Deseos</div>
+            </div>
+            <div class="category-amount">€1.100/€1.400</div>
+          </div>
+          <div class="category-item">
+            <div class="category-info">
+              <div class="category-color color-savings"></div>
+              <div class="category-name">Ahorros</div>
+            </div>
+            <div class="category-amount">€600/€1.000</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta de Flujo de Caja -->
+      <div class="card cashflow-card">
+        <div class="cashflow-header">
+          <h3>Mi Flujo de Caja para Junio</h3>
+        </div>
+        <div class="cashflow-details">
+          <div class="cashflow-item">
+            <h4>INGRESOS</h4>
+            <div class="cashflow-amount">€3.000</div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 60%"></div>
+            </div>
+          </div>
+          <div class="cashflow-item">
+            <h4>GASTADO</h4>
+            <div class="cashflow-amount">€1.194</div>
+          </div>
+          <div class="cashflow-item">
+            <h4>RESTANTE</h4>
+            <div class="cashflow-amount">€1.806</div>
+          </div>
+        </div>
+        <canvas id="cashflowChart" height="150"></canvas>
+      </div>
+
+      <!-- Tarjeta de Facturas Próximas -->
+      <div class="card upcoming-bills">
+        <div class="card-header">
+          <h3>Facturas Próximas</h3>
+          <div class="card-options">⋮</div>
+        </div>
+        <div>
+          <div>Total Facturas Pendientes: <strong>€1.850,20</strong></div>
+        </div>
+        <div class="bill-list">
+          <div class="bill-item">
+            <div class="bill-info">
+              <span class="bill-date">JUN 1</span>
+              <span class="bill-name">Alquiler</span>
+            </div>
+            <span class="bill-amount">€1.100,00</span>
+            <button class="bill-action paid">Pagado</button>
+          </div>
+          <div class="bill-item">
+            <div class="bill-info">
+              <span class="bill-date">JUN 15</span>
+              <span class="bill-name">Gimnasio</span>
+            </div>
+            <span class="bill-amount">€34,90</span>
+            <button class="bill-action">Pagar</button>
+          </div>
+          <div class="bill-item">
+            <div class="bill-info">
+              <span class="bill-date">JUN 30</span>
+              <span class="bill-name">Seguro Coche</span>
+            </div>
+            <span class="bill-amount">€115,00</span>
+            <button class="bill-action">Pagar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta de Balance Crypto -->
+      <div class="card crypto-balance">
+        <div class="card-header">
+          <h3>Mi Balance Financiero</h3>
+          <div class="card-options">⋮</div>
+        </div>
+        <div class="crypto-amounts">
+          <div class="crypto-value">€2.878,90</div>
+          <div class="crypto-change">+42€ última semana</div>
+        </div>
+        <canvas id="balanceChart" height="140"></canvas>
+        <div class="crypto-coins">
+          <div class="crypto-coin">0,9087 ETH</div>
+          <div class="crypto-coin">0,5 BTC</div>
+        </div>
+      </div>
+
+      <!-- Tarjeta de Inversiones -->
+      <div class="card investments-card">
+        <div class="card-header">
+          <h3>Invertir en Mi Futuro</h3>
+          <div class="card-options">⋮</div>
+        </div>
+        <div class="savings-goal">
+          <div class="goal-progress">
+            <div class="goal-circle"></div>
+            <div class="goal-amount">
+              <div>€4.200</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary);">/€6.000</div>
+            </div>
+          </div>
+          <p class="goal-text">METAS DE INVERSIÓN</p>
+        </div>
+        <button class="action-button">
+          <span class="emoji">💰</span> AHORRAR MÁS CON REDONDEO
+        </button>
+      </div>
+
+      <!-- Tarjeta de Préstamos -->
+      <div class="card loans-card">
+        <div class="card-header">
+          <h3>Pagando Préstamos</h3>
+          <div class="card-options">⋮</div>
+        </div>
+        <div style="margin: 20px 0; text-align: center;">
+          <div class="crypto-value">€430</div>
+          <p style="color: var(--text-secondary);">pagados hacia préstamos desde tu último login</p>
+          <div style="margin-top: 10px; font-size: 0.9rem;">
+            <span style="color: var(--text-secondary);">TODAVÍA DEBES</span> €15.600
+          </div>
+        </div>
+        <div style="margin-top: 10px; background-color: rgba(255, 255, 255, 0.03); padding: 10px; border-radius: 12px; text-align: center; color: var(--success-color);">
+          MENOR QUE EL PROMEDIO PARA TU EDAD
+        </div>
+        <button class="action-button secondary" style="margin-top: 20px;">
+          <span class="emoji">📊</span> VER DETALLES DE PRÉSTAMOS
+        </button>
+      </div>
     </div>
   </div>
-  
+
+  <!-- Navegación inferior -->
+  <div class="bottom-navigation">
+    <div onclick="navigateTo('home.html')" class="nav-item active">
+      <div>🏠</div>
+      <span>Dashboard</span>
+    </div>
+    <div class="nav-item">
+      <div>📊</div>
+      <span>Estadísticas</span>
+    </div>
+    <div class="nav-center-button">+</div>
+    <div class="nav-item">
+      <div>🔄</div>
+      <span>Transacciones</span>
+    </div>
+    <div onclick="navigateTo('perfil.html')" class="nav-item">
+      <div>👤</div>
+      <span>Perfil</span>
+    </div>
+  </div>
+
+  <script>
+    // Configuración para gráfico de flujo de caja
+    const cashflowCtx = document.getElementById('cashflowChart').getContext('2d');
+    const cashflowChart = new Chart(cashflowCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+        datasets: [{
+          label: 'Ingresos',
+          data: [750, 750, 750, 750],
+          backgroundColor: 'rgba(58, 90, 255, 0.7)',
+          borderRadius: 5
+        }, {
+          label: 'Gastos',
+          data: [420, 280, 320, 174],
+          backgroundColor: 'rgba(255, 75, 138, 0.7)',
+          borderRadius: 5
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              color: '#a7b0c4',
+              font: {
+                size: 11
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              color: '#a7b0c4',
+              font: {
+                size: 10
+              }
+            }
+          },
+          y: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.05)',
+              drawBorder: false
+            },
+            ticks: {
+              color: '#a7b0c4',
+              font: {
+                size: 10
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Configuración para gráfico de balance
+    const balanceCtx = document.getElementById('balanceChart').getContext('2d');
+    const balanceChart = new Chart(balanceCtx, {
+      type: 'line',
+      data: {
+        labels: ['Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        datasets: [{
+          label: 'Balance Total',
+          data: [2100, 2250, 2180, 2400, 2350, 2500, 2650, 2600, 2750, 2878.90],
+          borderColor: '#3a5aff',
+          backgroundColor: 'rgba(58, 90, 255, 0.1)',
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: '#3a5aff',
+          pointRadius: 0,
+          pointHoverRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              color: '#a7b0c4',
+              font: {
+                size: 10
+              }
+            }
+          },
+          y: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.05)',
+              drawBorder: false
+            },
+            ticks: {
+              color: '#a7b0c4',
+              font: {
+                size: 10
+              },
+              callback: function(value) {
+                return '€' + value;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Funciones para la aplicación
+    function addIncome() {
+      alert('Función para añadir ingreso');
+    }
+
+    function addExpense() {
+      alert('Función para añadir gasto');
+    }
+  </script>
+</body>
+</html>
