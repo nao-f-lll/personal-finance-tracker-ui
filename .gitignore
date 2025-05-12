@@ -1,1 +1,4 @@
-node_modules/
+data
+main
+.DS_Store
+.vscode
