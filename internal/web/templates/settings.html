@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/fa.min.css">
     <link rel="stylesheet" href="/style.css">
-    <title>ExpenseOwl Settings</title>
+    <title>Ajustes</title>
 </head>
 <body>
     <div class="container">
@@ -29,16 +29,16 @@
 
         <!-- Categories Section -->
         <div class="form-container">
-            <h2 align="center">Category Settings</h2>
+            <h2 align="center">Configuración de categorías</h2>
             <div id="categories-manager">
                 <div id="categories-list" class="categories-list">
                     <!-- Categories will be populated here -->
                 </div>
                 <div class="category-input-container">
                     <input type="text" id="newCategory" placeholder="Add new category">
-                    <button id="addCategory" class="nav-button">Add</button>
+                    <button id="addCategory" class="nav-button">Añadir</button>
                 </div>
-                <button id="saveCategories" class="nav-button">Save Categories</button>
+                <button id="saveCategories" class="nav-button">Guardar Categorías</button>
                 <div id="categoriesMessage" class="form-message"></div>
             </div>
         </div>
@@ -46,22 +46,22 @@
         <div class="settings-container">
             <!-- Currency Section -->
             <div class="form-container half-width">
-                <h2 align="center">Currency Settings</h2>
+                <h2 align="center">Ajustes de Divisa</h2>
                 <div class="currency-selector">
                     <select id="currencySelect">
                         <!-- Currencies will be populated here -->
                     </select>
-                    <button id="saveCurrency" class="nav-button">Save</button>
+                    <button id="saveCurrency" class="nav-button">Guardar</button>
                 </div>
                 <div id="currencyMessage" class="form-message"></div>
             </div>
             
             <!-- Start date section -->
             <div class="form-container half-width">
-                <h2 align="center">Start Date Settings</h2>
+                <h2 align="center">Configuración de fecha de inicio</h2>
                 <div class="start-date-manager">
                     <input type="number" id="startDate" min="1" max="31" placeholder="1">
-                    <button id="saveStartDate" class="nav-button">Save</button>
+                    <button id="saveStartDate" class="nav-button">Guardar</button>
                 </div>
                 <div id="startDateMessage" class="form-message"></div>
             </div>
@@ -69,20 +69,20 @@
 
         <!-- Import/Export Section -->
         <div class="form-container">
-            <h2 align="center">Import/Export Data</h2>
+            <h2 align="center">Importar/Exportar Información</h2>
             <div class="export-buttons">
                 <a href="/export/csv" class="nav-button" download="expenses.csv">
-                    <i class="fa-solid fa-file-csv"></i> Export CSV
+                    <i class="fa-solid fa-file-csv"></i> Exportar CSV
                 </a>
                 <a href="/export/json" class="nav-button" download="expenses.json">
-                    <i class="fa-solid fa-file-code"></i> Export JSON
+                    <i class="fa-solid fa-file-code"></i> Exportar JSON
                 </a>
                 <label for="csvFile" class="nav-button">
-                    <i class="fa-solid fa-file-csv"></i> Import CSV
+                    <i class="fa-solid fa-file-csv"></i> Importar CSV
                 </label>
                 <input type="file" id="csvFile" accept=".csv" style="display: none;">
                 <label for="jsonFile" class="nav-button">
-                    <i class="fa-solid fa-file-code"></i> Import JSON
+                    <i class="fa-solid fa-file-code"></i> Importar JSON
                 </label>
                 <input type="file" id="jsonFile" accept=".json" style="display: none;">
             </div>
