@@ -4,22 +4,17 @@ WORKDIR /app
 
 COPY . .
 
-# Build the application
-RUN go build -o expenseowl ./cmd/expenseowl
+RUN go build -o expenseapp ./cmd/expenseapp  # Update this line if the path is different
 
-# Use a minimal alpine image for running
 FROM alpine:latest
 
 WORKDIR /app
 
-# Create data directory if not exists
 RUN mkdir -p /app/data
 
-# Copy the binary from builder
-COPY --from=builder /app/expenseowl .
+COPY --from=builder /app/expenseapp .
 
-# Expose the default port
 EXPOSE 8080
 
 # Run the server
-CMD ["./expenseowl"]
+CMD ["./expenseapp"]
