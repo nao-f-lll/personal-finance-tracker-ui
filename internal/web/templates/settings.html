@@ -15,13 +15,13 @@
                 <a href="/">
                     <img src="/pwa/icon-512.png" alt="ExpenseOwl Logo" height="85" style="vertical-align: middle; margin-right: 20px;">
                 </a>
-                <a href="/" class="view-button" data-tooltip="Dashboard">
+                <a href="/" class="view-button" data-tooltip="Panel de control">
                     <i class="fa-solid fa-chart-pie"></i>
                 </a>
-                <a href="/table" class="view-button" data-tooltip="Table View">
+                <a href="/table" class="view-button" data-tooltip="Vista de tabla">
                     <i class="fa-solid fa-table"></i>
                 </a>
-                <a href="/settings" class="view-button active" data-tooltip="Settings">
+                <a href="/settings" class="view-button active" data-tooltip="Configuración">
                     <i class="fa-solid fa-gear"></i>
                 </a>
             </div>
@@ -35,7 +35,7 @@
                     <!-- Categories will be populated here -->
                 </div>
                 <div class="category-input-container">
-                    <input type="text" id="newCategory" placeholder="Add new category">
+                    <input type="text" id="newCategory" placeholder="Agregar nueva categoría">
                     <button id="addCategory" class="nav-button">Añadir</button>
                 </div>
                 <button id="saveCategories" class="nav-button">Guardar Categorías</button>
@@ -258,7 +258,7 @@
                 renderCategories();
                 input.value = '';
             } else if (categories.includes(category)) {
-                showMessage('categoriesMessage', 'Category already exists', false);
+                showMessage('categoriesMessage', 'La categoría ya existe', false);
             }
         }
 
@@ -269,7 +269,7 @@
 
         async function saveCategories() {
             if (categories.length === 0) {
-                showMessage('categoriesMessage', 'At least one category is required', false);
+                showMessage('categoriesMessage', 'Se requiere al menos una categoría', false);
                 return;
             }
             try {
@@ -281,13 +281,13 @@
                     body: JSON.stringify(categories)
                 });   
                 if (response.ok) {
-                    showMessage('categoriesMessage', 'Categories saved successfully', true);
+                    showMessage('categoriesMessage', 'Categorías guardadas con éxito', true);
                 } else {
-                    showMessage('categoriesMessage', 'Failed to save categories', false);
+                    showMessage('categoriesMessage', 'No se pudo guardar las categorías', false);
                 }
             } catch (error) {
                 console.error('Error saving categories:', error);
-                showMessage('categoriesMessage', 'Error saving categories', false);
+                showMessage('categoriesMessage', 'Categorías de ahorro de errores', false);
             }
         }
 
@@ -317,14 +317,14 @@
                     body: JSON.stringify(currencyCode)
                 });
                 if (response.ok) {
-                    showMessage('currencyMessage', 'Currency saved successfully', true);
+                    showMessage('currencyMessage', 'Moneda guardada con éxito', true);
                     currentCurrency = currencySymbols[currencyCode];
                 } else {
-                    showMessage('currencyMessage', 'Failed to save currency', false);
+                    showMessage('currencyMessage', 'No se pudo guardar la moneda', false);
                 }
             } catch (error) {
                 console.error('Error saving currency:', error);
-                showMessage('currencyMessage', 'Error saving currency', false);
+                showMessage('currencyMessage', 'Error de guardar moneda', false);
             }
         }
 
@@ -345,13 +345,13 @@
                     body: startDate
                 });
                 if (response.ok) {
-                    showMessage('startDateMessage', 'Start date saved successfully', true);
+                    showMessage('startDateMessage', 'Fecha de inicio guardada con éxito', true);
                 } else {
-                    showMessage('startDateMessage', 'Failed to save start date', false);
+                    showMessage('startDateMessage', 'No se pudo guardar la fecha de inicio', false);
                 }
             } catch (error) {
                 console.error('Error saving start date:', error);
-                showMessage('startDateMessage', 'Error saving start date', false);
+                showMessage('startDateMessage', 'Fecha de inicio de guardado del error', false);
             }
         }
 
@@ -378,7 +378,7 @@
                 populateStartDateInput();
             } catch (error) {
                 console.error('Failed to initialize settings:', error);
-                showMessage('categoriesMessage', 'Failed to load settings', false);
+                showMessage('categoriesMessage', 'No se pudo cargar la configuración', false);
             }
         }
 
@@ -406,7 +406,7 @@
                 }
 
                 const result = await response.json();
-                importMessageDiv.textContent = `Successfully imported ${result.imported} expenses!`;
+                importMessageDiv.textContent = `importado con éxito ${result.imported} gastos!`;
                 importMessageDiv.className = 'form-message success';
                 const summaryDiv = document.getElementById('importSummary');
                 summaryDiv.style.display = 'block';
@@ -418,7 +418,7 @@
 
                 if (result.new_categories && result.new_categories.length > 0) {
                     summaryDiv.innerHTML += `
-                        <div><strong>New categories added (refreshing in ~4 seconds):</strong> ${result.new_categories.join(', ')}</div>
+                        <div><strong>Se han añadido nuevas categorías (refreshing in ~4 seconds):</strong> ${result.new_categories.join(', ')}</div>
                     `;
                     // Refresh needed to show new categories
                     setTimeout(() => {

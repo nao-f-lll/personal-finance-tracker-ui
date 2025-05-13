@@ -197,16 +197,16 @@
 
         function createTable(expenses) {
             if (expenses.length === 0) {
-                return `<div class="no-data">No expenses recorded for this month</div>`;
+                return `<div class="no-data">No hay gastos registrados para este mes</div>`;
             }
             return `
                 <table class="expense-table">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Amount</th>
-                            <th class="date-header">Date</th>
+                            <th>Nombre</th>
+                            <th>categoría</th>
+                            <th>importe</th>
+                            <th class="date-header">fecha</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -273,7 +273,7 @@
             } catch (error) {
                 console.error('Failed to initialize table:', error);
                 document.getElementById('tableContainer').innerHTML = 
-                    '<div class="no-data">Failed to load expenses</div>';
+                    '<div class="no-data">No se cargaron los gastos</div>';
             }
         }
 
@@ -326,7 +326,7 @@
                 closeDeleteModal();
             } catch (error) {
                 console.error('Error deleting expense:', error);
-                alert('Failed to delete expense. Please try again.');
+                alert('No se pudo eliminar el gasto. Por favor, inténtelo de nuevo.');
             }
         }
 
@@ -357,11 +357,11 @@
                 });
                 const messageDiv = document.getElementById('formMessage');
                 if (response.ok) {
-                    messageDiv.textContent = editId ? 'Expense updated successfully!' : 'Expense added successfully!';
+                    messageDiv.textContent = editId ? 'Gasto actualizado con éxito!' : 'Gasto añadido con éxito!';
                     messageDiv.className = 'form-message success';
                     form.reset();
                     delete form.dataset.editId;
-                    form.querySelector('button[type="submit"]').textContent = 'Add Expense';
+                    form.querySelector('button[type="submit"]').textContent = 'Añadir gasto';
                     await initialize();
                     const today = new Date();
                     const year = today.getFullYear();
@@ -370,7 +370,7 @@
                     document.getElementById('date').value = `${year}-${month}-${day}`;
                 } else {
                     const error = await response.json();
-                    messageDiv.textContent = `Error: ${error.error || 'Failed to save expense'}`;
+                    messageDiv.textContent = `Error: ${error.error || 'No pudo ahorrar gastos'}`;
                     messageDiv.className = 'form-message error';
                 }
                 // Clear message after 3 seconds
@@ -381,7 +381,7 @@
             } catch (error) {
                 console.error('Error saving expense:', error);
                 const messageDiv = document.getElementById('formMessage');
-                messageDiv.textContent = 'Error: Failed to save expense';
+                messageDiv.textContent = 'Error: No se pudo guardar el gasto';
                 messageDiv.className = 'form-message error';
             }
         });
