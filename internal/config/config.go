@@ -28,16 +28,15 @@ type FileConfig struct {
 }
 
 var defaultCategories = []string{
-	"Food",
-	"Groceries",
-	"Travel",
-	"Rent",
-	"Utilities",
-	"Entertainment",
-	"Healthcare",
-	"Shopping",
-	"Miscellaneous",
-	"Income",
+	"Comida",
+	"Supermercado",
+	"Viajes",
+	"Alquiler",
+	"Servicios públicos",
+	"Ocio y entretenimiento",
+	"Salud",
+	"Compras",
+	"Varios",
 }
 
 var currencySymbols = map[string]string{
