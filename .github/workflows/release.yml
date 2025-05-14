@@ -98,7 +98,6 @@ jobs:
       - name: Create Inno Setup Script
         run: |
           $version = "${{ needs.create-release.outputs.version }}"
-          Write-Host "Using version: $version"  # Debugging line to check version
           @"
           [Setup]
           AppName=ExpenseApp
