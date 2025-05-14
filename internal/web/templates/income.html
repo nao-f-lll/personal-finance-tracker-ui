@@ -7,16 +7,8 @@
     <meta name="theme-color" content="#1a1a1a">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" href="/pwa/icon-192.png">
     <link rel="stylesheet" href="/style.css">
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js');
-            });
-        }
-    </script>
+    
     <title>Ingresos</title>
     <script src="/chart.min.js"></script>
 </head>
@@ -27,7 +19,7 @@
                 <a href="/" class="view-button" data-tooltip="Dashboard">
                     <i class="fa-solid fa-chart-pie"></i>
                 </a>
-                <a href="./income.html" class="view-button active" data-tooltip="Ingresos">
+                <a href="/income" class="view-button active" data-tooltip="Ingresos">
                     <i class="fa-solid fa-arrow-trend-up"></i>
                 </a>
                 <a href="/table" class="view-button" data-tooltip="Table View">
