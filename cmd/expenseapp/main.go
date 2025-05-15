@@ -29,7 +29,7 @@ func runServer(dataPath string) {
 	http.HandleFunc("/expense/edit", handler.EditExpense)
 	http.HandleFunc("/table", handler.ServeTableView)
 	http.HandleFunc("/settings", handler.ServeSettingsPage)
-	http.HandleFunc("/income", handler.ServeSettingsPage)
+	http.HandleFunc("/income", handler.ServeIncomesPage)
 	http.HandleFunc("/expense/delete", handler.DeleteExpense)
 	http.HandleFunc("/export/json", handler.ExportJSON)
 	http.HandleFunc("/import/csv", handler.ImportCSV)
