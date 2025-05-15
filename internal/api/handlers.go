@@ -228,6 +228,20 @@ func (h *Handler) ServeSettingsPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *Handler) ServeIncomesPage(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		log.Println("HTTP ERROR: Method not allowed")
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	if err := web.ServeTemplate(w, "income.html"); err != nil {
+		http.Error(w, "Failed to serve template", http.StatusInternalServerError)
+		log.Printf("HTTP ERROR: Failed to serve template: %v\n", err)
+		return
+	}
+}
+
 func (h *Handler) DeleteExpense(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
