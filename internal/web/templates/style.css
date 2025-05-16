@@ -231,6 +231,26 @@ header {
     animation: tooltip-appear 0.1s ease forwards;
 }
 
+/* Tema oscuro (predeterminado) */
+[data-theme="dark"] {
+    --bg-primary: #081528;
+    --bg-secondary: #101f3b;
+    --text-primary: #f4f4f4;
+    --text-secondary: #b3b3b3;
+    --border: #1a365d;
+    --accent: #69afde;
+}
+
+/* Tema claro */
+[data-theme="light"] {
+    --bg-primary: #f2e5d7;
+    --bg-secondary: #faecdd;
+    --text-primary: #2e2e2e;
+    --text-secondary: #3e3e3e;
+    --border: #e6ddd4;
+    --accent: #69afde;
+}
+
 @keyframes tooltip-appear {
     to {
         opacity: 1;
