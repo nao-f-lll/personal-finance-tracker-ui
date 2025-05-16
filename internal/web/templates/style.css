@@ -26,6 +26,8 @@ body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
     line-height: 1.6;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 .container {
@@ -250,6 +252,7 @@ header {
     --border: #e6ddd4;
     --accent: #69afde;
 }
+
 
 /* Estilo para el botón de cambio de tema */
 #themeToggle {
