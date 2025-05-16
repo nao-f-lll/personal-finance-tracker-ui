@@ -1,11 +1,75 @@
 :root {
-    /* Dark mode - modern dark blue theme */
+    --bg-primary: #f5f8fa;
+    --bg-secondary: #ffffff;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --border: #dde1e6;
+    --accent: #3498db;
+}
+
+/* Variables para modo oscuro */
+[data-theme="dark"] {
     --bg-primary: #081528;
     --bg-secondary: #101f3b;
     --text-primary: #f4f4f4;
     --text-secondary: #b3b3b3;
     --border: #1a365d;
     --accent: #69afde;
+}
+
+/* Transición suave entre temas */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Estilos para el tema selector */
+.theme-selector {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+#toggleTheme {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#toggleTheme:hover {
+    background-color: #2980b9;
+}
+
+#toggleTheme i {
+    font-size: 16px;
+}
+
+/* Aplicar colores de tema a elementos específicos */
+body, .container {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.form-container, .categories-list, .category-item, .nav-bar, .category-input-container input {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border);
+}
+
+input, select, button {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+}
+
+.nav-button, .view-button {
+    background-color: var(--accent);
 }
 
 @media (prefers-color-scheme: light) {

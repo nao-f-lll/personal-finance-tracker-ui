@@ -14,13 +14,13 @@
                 <a href="/" class="view-button" data-tooltip="Dashboard">
                     <i class="fa-solid fa-chart-pie"></i>
                 </a>
-                <a href="/income" class="view-button active" data-tooltip="Ingresos">
+                <a href="/income" class="view-button " data-tooltip="Ingresos">
                     <i class="fa-solid fa-arrow-trend-up"></i>
                 </a>
                 <a href="/table" class="view-button" data-tooltip="Table View">
                     <i class="fa-solid fa-table"></i>
                 </a>
-                <a href="/settings" class="view-button" data-tooltip="Settings">
+                <a href="/settings" class="view-button active" data-tooltip="Settings">
                     <i class="fa-solid fa-gear"></i>
                 </a>
             </div>
@@ -65,6 +65,16 @@
                 <div id="startDateMessage" class="form-message"></div>
             </div>
         </div>
+        <!-- Añade este contenido a tu HTML, justo antes del cierre del div settings-container -->
+        <div class="form-container half-width">
+            <h2 align="center">Modo de visualización</h2>
+            <div class="theme-selector">
+                <button id="toggleTheme" class="nav-button">
+                    <i class="fa-solid fa-moon"></i> Cambiar a modo oscuro
+                </button>
+            </div>
+            <div id="themeMessage" class="form-message"></div>
+        </div>
 
         <!-- Import/Export Section -->
         <div class="form-container">
@@ -91,6 +101,55 @@
     </div>
 
     <script>
+        function loadThemePreference() {
+            // Verificar si hay un tema guardado en localStorage
+            const savedTheme = localStorage.getItem('theme');
+            // Si existe un tema guardado, aplicarlo
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                updateThemeButton(savedTheme);
+            } else {
+                // Si no hay tema guardado, establecer el tema claro por defecto
+                document.documentElement.setAttribute('data-theme', 'light');
+                updateThemeButton('light');
+            }
+        }
+
+        function toggleTheme() {
+            // Obtener el tema actual
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            // Cambiar al tema opuesto
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            // Aplicar el nuevo tema
+            document.documentElement.setAttribute('data-theme', newTheme);
+            // Guardar la preferencia en localStorage
+            localStorage.setItem('theme', newTheme);
+            
+            // Actualizar el texto del botón
+            updateThemeButton(newTheme);
+            
+            // Mostrar mensaje de confirmación
+            showMessage('themeMessage', `Cambiado a modo ${newTheme === 'dark' ? 'oscuro' : 'claro'}`, true);
+        }
+
+        function updateThemeButton(theme) {
+            const button = document.getElementById('toggleTheme');
+            if (theme === 'dark') {
+                button.innerHTML = '<i class="fa-solid fa-sun"></i> Cambiar a modo claro';
+            } else {
+                button.innerHTML = '<i class="fa-solid fa-moon"></i> Cambiar a modo oscuro';
+            }
+        }
+
+        // Añadir event listener para el botón de tema
+        document.getElementById('toggleTheme').addEventListener('click', toggleTheme);
+
+        // Cargar preferencia de tema al inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            initialize();
+            loadThemePreference();
+        });
         const currencySymbols = {
             "usd": "$",    // US Dollar
             "eur": "€",    // Euro
