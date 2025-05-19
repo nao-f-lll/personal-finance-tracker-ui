@@ -9,92 +9,92 @@
 </p>
 
 <p align="center">
-<a href="#why-create-this">Why Create This?</a>&nbsp;&bull;&nbsp;<a href="#features">Features</a>&nbsp;&bull;&nbsp;<a href="#screenshots">Screenshots</a><br><a href="#installation">Installation</a>&nbsp;&bull;&nbsp;<a href="#usage">Usage</a>&nbsp;&bull;&nbsp;<a href="#contributing">Contributing</a>&nbsp;&bull;&nbsp;<a href="#technology-stack">Tech Stack</a>
+<a href="#por-qué-crear-esto">¿Por qué crear esto?</a>&nbsp;&bull;&nbsp;<a href="#características">Características</a>&nbsp;&bull;&nbsp;<a href="#capturas-de-pantalla">Capturas de pantalla</a><br><a href="#instalación">Instalación</a>&nbsp;&bull;&nbsp;<a href="#uso">Uso</a>&nbsp;&bull;&nbsp;<a href="#contribuciones">Contribuciones</a>&nbsp;&bull;&nbsp;<a href="#stack-tecnológico">Stack tecnológico</a>
 </p>
 
 <br>
 
 <p align="center">
-<b>ExpenseOwl</b> is an extremely simple self-hosted expense tracking system with a modern monthly pie-chart visualization and cashflow showcase.
+<b>ExpenseOwl</b> es un sistema de seguimiento de gastos extremadamente simple, autoalojado, con una visualización moderna de gráfico circular mensual y muestra de flujo de caja.
 </p>
 
 <br>
 
-# Why Create This?
+# Por qué crear esto?
 
-There are a ton of amazing projects for expense tracking across GitHub ([Actual](https://github.com/actualbudget/actual), [Firefly III](https://github.com/firefly-iii/firefly-iii), etc.). They're all really incredible! I just find that they aren't the *fastest* or *simplest* to add expenses. They also offer too many features I never use (like varying data formats or complex budgeting). *Don't get me wrong*, they're amazing when complexity is needed, but I wanted something ***dead simple*** that only gives me a quick monthly pie chart and a tabular representation. NOTHING else!
+Hay una gran cantidad de proyectos increíbles para el seguimiento de gastos en GitHub ([Actual](https://github.com/actualbudget/actual), [Firefly III](https://github.com/firefly-iii/firefly-iii), etc.). ¡Todos son realmente increíbles! Simplemente encuentro que no son los *más rápidos* o *más simples* para agregar gastos. También ofrecen demasiadas funciones que nunca uso (como formatos de datos variables o presupuestos complejos). *No me malinterpreten*, son increíbles cuando se necesita complejidad, pero quería algo ***extremadamente simple*** que solo me diera un rápido gráfico circular mensual y una representación tabular. ¡NADA más!
 
-That's why I created this project and I use it in my home lab for my expense tracking. The intention is to track spending across your categories in a simplistic manner. No complicated searching or editing - just `add`, `delete`, and `view`! This intention will not change throughout the project's lifecycle. This is *not* an app for budgeting; it's for straightforward tracking.
+Por eso creé este proyecto y lo uso en mi laboratorio doméstico para mi seguimiento de gastos. La intención es rastrear los gastos en tus categorías de manera simplista. Sin búsquedas o ediciones complicadas - ¡solo `agregar`, `eliminar` y `ver`! Esta intención no cambiará durante el ciclo de vida del proyecto. Esta *no* es una aplicación para presupuestar; es para un seguimiento sencillo.
 
-# Features
+# Características
 
-### Core Functionality
+### Funcionalidad principal
 
-- Expense tracking with essential details only (optional name, date, amount, and category)
-- Flat file storage system (`data/expenses.json`)
-- REST API for expense management
-- Single-user focused (mainly for a home lab deployment)
-- CSV and JSON export and import of all expense data from the UI
-- Custom categories, currency symbol, and start date via app settings
-- Beautiful interface that automatically adapts to system for light/dark theme
-- UUID-based expense identification in the backend
-- Self-contained binary and container image to ensure no internet interaction
-- Multi-architecture Docker container with support for persistent storage
+- Seguimiento de gastos solo con detalles esenciales (nombre opcional, fecha, monto y categoría)
+- Sistema de almacenamiento de archivos planos (`data/expenses.json`)
+- API REST para la gestión de gastos
+- Enfocado a un solo usuario (principalmente para una implementación en laboratorio doméstico)
+- Exportación e importación de todos los datos de gastos en CSV y JSON desde la interfaz de usuario
+- Categorías personalizadas, símbolo de moneda y fecha de inicio a través de la configuración de la aplicación
+- Hermosa interfaz que se adapta automáticamente al sistema para tema claro/oscuro
+- Identificación de gastos basada en UUID en el backend
+- Binario autónomo e imagen de contenedor para garantizar que no haya interacción con internet
+- Contenedor Docker multi-arquitectura con soporte para almacenamiento persistente
 
-### Visualization
+### Visualización
 
-1. Main dashboard - category breakdown (pie chart)
-    - Click on a category to exclude it from the graph and total; click again to add it back
-    - This helps visualize the breakdown without considering some categories like Rent
-    - The legend shows categories that make up the the total expenditure of the month
-2. Main dashboard - cashflow indicator
-    - The default settings have an `Income` category, items in which are not considered expenses
-    - If a month has an item in `Income`, ExpenseOwl automatically shows cashflow below the graph
-    - Cashflow shows total income, total expenses, and balance (red or green based on +ve or -ve)
-3. Table view for detailed expense listing
-    - This is where you can view individual expenses chronologically and delete them
-    - You can use the browser's search to find a name if needed
-4. Month-by-month navigation in both dashboard and table views
-5. Settings page for configuring the application
-    - Reorder, add, or remove custom categories
-    - Select a custom currency to display
-    - Select a custom start date to show expenses for a different period
-    - Exporting data as CSV or JSON and import data from JSON or CSV
+1. Panel principal - desglose por categorías (gráfico circular)
+    - Haz clic en una categoría para excluirla del gráfico y del total; haz clic nuevamente para agregarla de nuevo
+    - Esto ayuda a visualizar el desglose sin considerar algunas categorías como Alquiler
+    - La leyenda muestra las categorías que componen el gasto total del mes
+2. Panel principal - indicador de flujo de caja
+    - La configuración predeterminada tiene una categoría `Ingresos`, cuyos elementos no se consideran gastos
+    - Si un mes tiene un elemento en `Ingresos`, ExpenseOwl muestra automáticamente el flujo de caja debajo del gráfico
+    - El flujo de caja muestra los ingresos totales, los gastos totales y el balance (rojo o verde según sea positivo o negativo)
+3. Vista de tabla para listado detallado de gastos
+    - Aquí es donde puedes ver los gastos individuales cronológicamente y eliminarlos
+    - Puedes usar la búsqueda del navegador para encontrar un nombre si es necesario
+4. Navegación mes a mes tanto en vistas de panel como de tabla
+5. Página de configuración para configurar la aplicación
+    - Reordenar, agregar o eliminar categorías personalizadas
+    - Seleccionar una moneda personalizada para mostrar
+    - Seleccionar una fecha de inicio personalizada para mostrar gastos de un período diferente
+    - Exportar datos como CSV o JSON e importar datos desde JSON o CSV
 
-### Progressive Web App (PWA)
+### Aplicación Web Progresiva (PWA)
 
-The front end of ExpenseOwl can be installed as a Progressive Web App on desktop and mobile devices (i.e., the back end still needs to be self-hosted). To install:
+El frontend de ExpenseOwl puede instalarse como una Aplicación Web Progresiva en dispositivos de escritorio y móviles (es decir, el backend aún debe estar autoalojado). Para instalar:
 
-- Desktop: Click the install icon in your browser's address bar
-- iOS: Use Safari's "Add to Home Screen" option in the share menu
-- Android: Use Chrome's "Install" option in the menu
+- Escritorio: Haz clic en el icono de instalación en la barra de direcciones de tu navegador
+- iOS: Usa la opción "Añadir a pantalla de inicio" de Safari en el menú compartir
+- Android: Usa la opción "Instalar" de Chrome en el menú
 
-# Screenshots
+# Capturas de pantalla
 
-Dashboard Showcase:
+Muestra del Panel:
 
-| | Desktop View | Mobile View |
+| | Vista de Escritorio | Vista Móvil |
 | --- | --- | --- |
-| Dark | <img src="/assets/desktop-dark-main.png" alt="Dashboard Dark" /> | <img src="/assets/mobile-dark-main.png" alt="Mobile Dashboard Dark" /> |
-| Light | <img src="/assets/desktop-light-main.png" alt="Dashboard Light" /> | <img src="/assets/mobile-light-main.png" alt="Mobile Dashboard Light" /> |
+| Oscuro | <img src="/assets/desktop-dark-main.png" alt="Panel Oscuro" /> | <img src="/assets/mobile-dark-main.png" alt="Panel Móvil Oscuro" /> |
+| Claro | <img src="/assets/desktop-light-main.png" alt="Panel Claro" /> | <img src="/assets/mobile-light-main.png" alt="Panel Móvil Claro" /> |
 
 <details>
-<summary>Expand this to see screenshots of other pages</summary>
+<summary>Expande esto para ver capturas de pantalla de otras páginas</summary>
 
-| | Desktop View | Mobile View |
+| | Vista de Escritorio | Vista Móvil |
 | --- | --- | --- |
-| Table Dark | <img src="/assets/desktop-dark-table.png" alt="Dashboard Dark" /> | <img src="/assets/mobile-dark-table.png" alt="Mobile Dashboard Dark" /> |
-| Table Light | <img src="/assets/desktop-light-table.png" alt="Dashboard Light" /> | <img src="/assets/mobile-light-table.png" alt="Mobile Dashboard Light" /> |
-| Settings Dark | <img src="/assets/desktop-dark-settings.png" alt="Table Dark" /> | <img src="/assets/mobile-dark-settings.png" alt="Mobile Table Dark" /> |
-| Settings Light | <img src="/assets/desktop-light-settings.png" alt="Table Light" /> | <img src="/assets/mobile-light-settings.png" alt="Mobile Table Light" /> |
+| Tabla Oscuro | <img src="/assets/desktop-dark-table.png" alt="Panel Oscuro" /> | <img src="/assets/mobile-dark-table.png" alt="Panel Móvil Oscuro" /> |
+| Tabla Claro | <img src="/assets/desktop-light-table.png" alt="Panel Claro" /> | <img src="/assets/mobile-light-table.png" alt="Panel Móvil Claro" /> |
+| Configuración Oscuro | <img src="/assets/desktop-dark-settings.png" alt="Tabla Oscura" /> | <img src="/assets/mobile-dark-settings.png" alt="Tabla Móvil Oscura" /> |
+| Configuración Claro | <img src="/assets/desktop-light-settings.png" alt="Tabla Clara" /> | <img src="/assets/mobile-light-settings.png" alt="Tabla Móvil Clara" /> |
 
 </details>
 
-# Installation
+# Instalación
 
-### Docker Installation (Recommended)
+### Instalación con Docker (Recomendada)
 
-Create a volume or a directory for the project:
+Crea un volumen o un directorio para el proyecto:
 
 ```bash
 mkdir $HOME/expenseowl
@@ -108,7 +108,7 @@ docker run --rm -d \
 tanq16/expenseowl:main
 ```
 
-To use it with Docker compose or a container-management system like Portainer or Dockge, use this YAML definition:
+Para usarlo con Docker compose o un sistema de gestión de contenedores como Portainer o Dockge, usa esta definición YAML:
 
 ```yaml
 services:
@@ -125,15 +125,15 @@ services:
 
 Download the appropriate binary from the project releases. Running the binary automatically sets up a `data` directory in your CWD. You can visit the frontend at `http://localhost:8080`.
 
-### Building from Source
+### Compilando desde el código fuente
 
-To directly install the binary from source into your GOBIN, use:
+Para instalar directamente el binario desde el código fuente en tu GOBIN, usa:
 
 ```bash
 go install github.com/tanq16/expenseowl/cmd/expenseowl@latest
 ```
 
-Otherwise, to build it yourself:
+De lo contrario, para compilarlo tú mismo:
 
 ```bash
 git clone https://github.com/tanq16/expenseowl.git && \
@@ -141,25 +141,21 @@ cd expenseowl && \
 go build ./cmd/expenseowl
 ```
 
-### Kubernetes Deployment
+# Uso
 
-The project also has a community-contributed Kubernetes spec. The spec is a sample and you should review it before deploying in your cluster. Read the [associated readme](./kubernetes/README.md) for more information.
-
-# Usage
-
-Once deployed, use the web interface to do everything. Access it through your browser:
+Una vez desplegado, usa la interfaz web para hacer todo. Accede a través de tu navegador:
 
 - Dashboard: `http://localhost:8080/`
-- Table View: `http://localhost:8080/table`
+- Income View: `http://localhost:8080/income`
 
 > [!NOTE]
-> This app has no authentication, so deploy carefully. It works very well with a reverse proxy like Nginx Proxy Manager and is mainly intended for homelab use. The app has not undergone a pentest to allow for any production deployment. It should strictly be deployed in a home lab setting, behind authentication, and for only one (or a few non-destructive) user(s).
+> Esta aplicación no tiene autenticación, así que despliégala con cuidado. Funciona muy bien con un proxy inverso como Nginx Proxy Manager y está principalmente destinada para uso en laboratorio doméstico. La aplicación no ha pasado por una prueba de penetración para permitir cualquier despliegue en producción. Debe implementarse estrictamente en un entorno de laboratorio doméstico, detrás de autenticación, y para solo uno (o unos pocos no destructivos) usuario(s).
 
-If command-line automations are required for use with the REST API, read on!
+Si se requieren automatizaciones de línea de comandos para usar con la API REST, ¡sigue leyendo!
 
-### Executable
+### Ejecutable
 
-The application binary can be run directly within CLI for any common OS and architecture:
+El binario de la aplicación puede ejecutarse directamente dentro de CLI para cualquier sistema operativo y arquitectura común:
 
 ```bash
 ./expenseowl
@@ -169,9 +165,9 @@ The application binary can be run directly within CLI for any common OS and arch
 
 ### REST API
 
-ExpenseOwl provides an API to allow adding expenses via automations or simply via cURL, Siri Shortcuts, or other automations.
+ExpenseOwl proporciona una API para permitir agregar gastos a través de automatizaciones o simplemente a través de cURL, atajos de Siri u otras automatizaciones.
 
-Add Expense:
+Agregar Gasto:
 
 ```bash
 curl -X PUT http://localhost:8080/expense \
@@ -184,69 +180,61 @@ curl -X PUT http://localhost:8080/expense \
 }'
 ```
 
-Get All Expenses:
+Obtener Todos los Gastos:
 
 ```bash
 curl http://localhost:8080/expenses
 ```
 
-### Config Options
+### Opciones de Configuración
 
-The primary config is stored in the data directory in the `config.json` file. A pre-defined configuration is automatically initialized. The currency in use and the categories can be customized from the `/settings` endpoint within the UI.
+La configuración principal se almacena en el directorio de datos en el archivo `config.json`. Una configuración predefinida se inicializa automáticamente. La moneda en uso y las categorías se pueden personalizar desde el punto final `/settings` dentro de la interfaz de usuario.
 
-ExpenseOwl supports multiple currencies through the CURRENCY environment variable. If not specified, it defaults to USD ($). All available options are shown in the UI settings page.
+ExpenseOwl admite múltiples monedas a través de la variable de entorno CURRENCY. Si no se especifica, por defecto es USD ($). Todas las opciones disponibles se muestran en la página de configuración de la interfaz de usuario.
 
-If setting up for the first time, an environment variable can be used for ease. For example, to use Euro:
+Si está configurando por primera vez, se puede usar una variable de entorno para facilitar las cosas. Por ejemplo, para usar Euro:
 
 ```bash
 CURRENCY=eur ./expenseowl
 ```
 
-ExpenseOwl also supports custom categories. A default set is pre-loaded in the config for ease of use and can be easily changed within the UI.
+ExpenseOwl también admite categorías personalizadas. Un conjunto predeterminado se precarga en la configuración para facilitar el uso y se puede cambiar fácilmente dentro de la interfaz de usuario.
 
-Like currency, if setting up for the first time, categories can be specified in an environment variable like so:
+Al igual que la moneda, si está configurando por primera vez, las categorías se pueden especificar en una variable de entorno así:
 
 ```bash
 EXPENSE_CATEGORIES="Rent,Food,Transport,Fun,Bills" ./expenseowl
 ```
 
 > [!TIP]
-> The environment variables can be set in a compose stack or using `-e` in the command line with a Docker command. However, remember that they are only effective in setting up the configuration for first start. Otherwise, use the settings UI.
+> Las variables de entorno se pueden configurar en un stack de compose o usando `-e` en la línea de comandos con un comando Docker. Sin embargo, recuerda que solo son efectivas para configurar la configuración de la primera vez. De lo contrario, usa la interfaz de usuario de configuración.
 
-Similarly, the start date can also be set via the settings UI or the `START_DATE` environment variable.
+De manera similar, la fecha de inicio también se puede establecer a través de la interfaz de usuario de configuración o la variable de entorno `START_DATE`.
 
 ### Data Import/Export
 
-ExpenseOwl contains a sophisticated method for importing an exporting expenses. The settings page provides the options for exporting all expense data as JSON or CSV. The same page also allows importing data in both JSON and CSV formats.
+ExpenseOwl contiene un método sofisticado para importar y exportar gastos. La página de configuración proporciona las opciones para exportar todos los datos de gastos como JSON o CSV. La misma página también permite importar datos en formatos JSON y CSV.
 
-**Importing CSV**
+**Importando CSV**
 
-ExpenseOwl is meant to make things simple, and importing CSV abides by the same philosophy. ExpenseOwl will accept any CSV file as long as it contains the columns - `name`, `category`, `amount`, and `date`. This is case-insensitive so `name` or `Name` doesn't matter.
+ExpenseOwl está destinado a simplificar las cosas, y la importación de CSV cumple con la misma filosofía. ExpenseOwl aceptará cualquier archivo CSV siempre que contenga las columnas - `name`, `category`, `amount` y `date`. Esto no distingue entre mayúsculas y minúsculas, por lo que no importa si es `name` o `Name`.
 
 > [!TIP]
-> This feature allows ExpenseOwl to use exported data from any tool as long as the required categories are present, making it insanely easy to shift from any provider.
+> Esta característica permite a ExpenseOwl usar datos exportados de cualquier herramienta siempre que estén presentes las categorías requeridas, lo que facilita enormemente el cambio desde cualquier proveedor.
 
-**Importing JSON**
+**Importando JSON**
 
-Primarily, ExpenseOwl maintains a JSON-backend for storing both expenses and config data. If you backed up a Docker volume containing the `config.json` and `expenses.json` files, the recommended way to restore is by mounting the same volume (or directory) to your new container. All data will be instantly usable.
+Principalmente, ExpenseOwl mantiene un backend JSON para almacenar tanto los datos de gastos como los de configuración. Si hiciste una copia de seguridad de un volumen de Docker que contiene los archivos `config.json` y `expenses.json`, la forma recomendada de restaurar es montando el mismo volumen (o directorio) en tu nuevo contenedor. Todos los datos serán inmediatamente utilizables.
 
-However, in case you need to import JSON formatted data from elsewhere (this is generally rare), you can use the import JSON feature.
+Sin embargo, en caso de que necesites importar datos con formato JSON desde otro lugar (esto generalmente es raro), puedes usar la función de importación JSON.
 
 > [!WARNING]
-> If the time field is not a proper date string (i.e., including time and zone), ExpenseOwl will do a best guess match to set the time to midnight UTC equivalent. This is because time zones are a ... thing.
+> Si el campo de tiempo no es una cadena de fecha adecuada (es decir, que incluya la hora y la zona), ExpenseOwl hará una suposición para establecer la hora a la medianoche equivalente UTC. Esto se debe a que las zonas horarias son un... tema
 
 > [!NOTE]
-> ExpenseOwl goes through every row in the imported data, and will intelligently fail on rows that have invalid or absent data. There is a 10 millisecond delay per record to reduce disk overhead, so please allow appropriate time for ingestion (eg. 10 seconds for 1000 records).
+> ExpenseOwl examina cada fila en los datos importados y fallará inteligentemente en filas que tengan datos inválidos o ausentes. Hay un retraso de 10 milisegundos por registro para reducir la sobrecarga del disco, así que permite el tiempo apropiado para la ingestión (por ejemplo, 10 segundos para 1000 registros).
 
-# Contributing
-
-Contributions are welcome; please ensure they align with the project's philosophy of maintaining simplicity by strictly using the current [tech stack](#technology-stack). It is intended for home lab use, i.e., a self-hosted first approach (containerized use). Consider the following:
-
-- Additions should have sensible defaults without breaking foundations
-- Environment variables can be used for user configuration in containers
-- Found a typo or need to ask a question? Please open an issue instead of a PR
-
-# Technology Stack
+# Stack Tecnológico
 
 - Backend: Go
 - Storage: JSON file system
