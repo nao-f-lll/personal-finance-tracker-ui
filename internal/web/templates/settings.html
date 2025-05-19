@@ -17,10 +17,10 @@
                 <a href="/income" class="view-button " data-tooltip="Ingresos">
                     <i class="fa-solid fa-arrow-trend-up"></i>
                 </a>
-                <a href="/table" class="view-button" data-tooltip="Table View">
+                <a href="/table" class="view-button" data-tooltip="Tabla">
                     <i class="fa-solid fa-table"></i>
                 </a>
-                <a href="/settings" class="view-button active" data-tooltip="Settings">
+                <a href="/settings" class="view-button active" data-tooltip="Ajustes">
                     <i class="fa-solid fa-gear"></i>
                 </a>
             </div>
@@ -396,7 +396,7 @@
                 categories = [...config.categories];
                 currentCurrency = config.currency;
                 currentStartDate = config.startDate;
-                let currentCurrencyCode = "usd"; // Default
+                let currentCurrencyCode = "eur"; // Default
                 for (const [code, symbol] of Object.entries(currencySymbols)) {
                     if (symbol === currentCurrency) {
                         currentCurrencyCode = code;
@@ -441,9 +441,9 @@
                 const summaryDiv = document.getElementById('importSummary');
                 summaryDiv.style.display = 'block';
                 summaryDiv.innerHTML = `
-                    <div><strong>Total processed:</strong> ${result.total_processed}</div>
-                    <div><strong>Successfully imported:</strong> ${result.imported}</div>
-                    <div><strong>Skipped:</strong> ${result.skipped}</div>
+                    <div><strong>Total procesado:</strong> ${result.total_processed}</div>
+                    <div><strong>Importado con éxito:</strong> ${result.imported}</div>
+                    <div><strong>Omitido:</strong> ${result.skipped}</div>
                 `;
 
                 if (result.new_categories && result.new_categories.length > 0) {
