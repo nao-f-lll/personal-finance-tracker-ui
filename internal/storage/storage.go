@@ -1,23 +1,16 @@
 package storage
 
 import (
-	"encoding/json"
+	"database/sql"
 	"errors"
-	"fmt"
-	"log"
-	"os"
-	"path/filepath"
-	"sync"
 	"time"
 
 	"github.com/google/uuid"
+	_ "github.com/lib/pq"
 	"github.com/tanq16/expenseowl/internal/config"
 )
 
-var (
-	ErrExpenseNotFound = errors.New("expense not found")
-	ErrInvalidExpense  = errors.New("invalid expense data")
-)
+var ErrExpenseNotFound = errors.New("expense not found")
 
 type Storage interface {
 	SaveExpense(expense *config.Expense) error
@@ -26,129 +19,76 @@ type Storage interface {
 	EditExpense(expense *config.Expense) error
 }
 
-type jsonStore struct {
-	filePath string
-	mu       sync.RWMutex
+type postgresStore struct {
+	db *sql.DB
 }
 
-type fileData struct {
-	Expenses []*config.Expense `json:"expenses"`
-}
-
-func New(filePath string) (*jsonStore, error) {
-	dir := filepath.Dir(filePath)
-	if err := os.MkdirAll(dir, 0755); err != nil {
-		return nil, fmt.Errorf("failed to create storage directory: %v", err)
-	}
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		initialData := fileData{Expenses: []*config.Expense{}}
-		data, err := json.Marshal(initialData)
-		if err != nil {
-			return nil, fmt.Errorf("failed to marshal initial data: %v", err)
-		}
-		if err := os.WriteFile(filePath, data, 0644); err != nil {
-			return nil, fmt.Errorf("failed to create storage file: %v", err)
-		}
-	}
-	log.Println("Created expense storage file")
-	return &jsonStore{
-		filePath: filePath,
-	}, nil
-}
-
-func (s *jsonStore) SaveExpense(expense *config.Expense) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	data, err := s.readFile()
+func NewPostgresStore(connStr string) (*postgresStore, error) {
+	db, err := sql.Open("postgres", connStr)
 	if err != nil {
-		return fmt.Errorf("failed to read storage file: %v", err)
+		return nil, err
 	}
+	if err := db.Ping(); err != nil {
+		return nil, err
+	}
+	return &postgresStore{db: db}, nil
+}
+
+func (s *postgresStore) SaveExpense(expense *config.Expense) error {
 	if expense.ID == "" {
 		expense.ID = uuid.New().String()
 	}
 	if expense.Date.IsZero() {
 		expense.Date = time.Now()
 	}
-	data.Expenses = append(data.Expenses, expense)
-	log.Printf("Added expense with ID %s\n", expense.ID)
-	return s.writeFile(data)
+	_, err := s.db.Exec(
+		`INSERT INTO expenses (id, name, category, amount, date) VALUES ($1, $2, $3, $4, $5)`,
+		expense.ID, expense.Name, expense.Category, expense.Amount, expense.Date,
+	)
+	return err
 }
 
-func (s *jsonStore) DeleteExpense(id string) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	data, err := s.readFile()
-	if err != nil {
-		return fmt.Errorf("failed to read storage file: %v", err)
-	}
-	found := false
-	newExpenses := make([]*config.Expense, 0, len(data.Expenses)-1)
-	for _, exp := range data.Expenses {
-		if exp.ID != id {
-			newExpenses = append(newExpenses, exp)
-		} else {
-			found = true
-		}
-	}
-	// log.Printf("Looped to find expense with ID %s. Found: %v\n", id, found)
-	if !found {
-		return fmt.Errorf("expense with ID %s not found", id)
-	}
-	data.Expenses = newExpenses
-	log.Printf("Deleted expense with ID %s\n", id)
-	return s.writeFile(data)
-}
-
-func (s *jsonStore) EditExpense(expense *config.Expense) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	data, err := s.readFile()
-	if err != nil {
-		return fmt.Errorf("failed to read storage file: %v", err)
-	}
-	found := false
-	for i, exp := range data.Expenses {
-		if exp.ID == expense.ID {
-			expense.Date = exp.Date
-			data.Expenses[i] = expense
-			found = true
-			break
-		}
-	}
-	if !found {
-		return ErrExpenseNotFound
-	}
-	log.Printf("Edited expense with ID %s\n", expense.ID)
-	return s.writeFile(data)
-}
-
-func (s *jsonStore) GetAllExpenses() ([]*config.Expense, error) {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-	data, err := s.readFile()
-	if err != nil {
-		return nil, fmt.Errorf("failed to read storage file: %v", err)
-	}
-	log.Println("Retrieved all expenses")
-	return data.Expenses, nil
-}
-
-func (s *jsonStore) readFile() (*fileData, error) {
-	content, err := os.ReadFile(s.filePath)
+func (s *postgresStore) GetAllExpenses() ([]*config.Expense, error) {
+	rows, err := s.db.Query(`SELECT id, name, category, amount, date FROM expenses`)
 	if err != nil {
 		return nil, err
 	}
-	var data fileData
-	if err := json.Unmarshal(content, &data); err != nil {
-		return nil, err
+	defer rows.Close()
+
+	var expenses []*config.Expense
+	for rows.Next() {
+		var e config.Expense
+		if err := rows.Scan(&e.ID, &e.Name, &e.Category, &e.Amount, &e.Date); err != nil {
+			return nil, err
+		}
+		expenses = append(expenses, &e)
 	}
-	return &data, nil
+	return expenses, nil
 }
 
-func (s *jsonStore) writeFile(data *fileData) error {
-	content, err := json.MarshalIndent(data, "", "    ")
+func (s *postgresStore) DeleteExpense(id string) error {
+	res, err := s.db.Exec(`DELETE FROM expenses WHERE id = $1`, id)
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(s.filePath, content, 0644)
+	n, _ := res.RowsAffected()
+	if n == 0 {
+		return ErrExpenseNotFound
+	}
+	return nil
+}
+
+func (s *postgresStore) EditExpense(expense *config.Expense) error {
+	res, err := s.db.Exec(
+		`UPDATE expenses SET name = $1, category = $2, amount = $3, date = $4 WHERE id = $5`,
+		expense.Name, expense.Category, expense.Amount, expense.Date, expense.ID,
+	)
+	if err != nil {
+		return err
+	}
+	n, _ := res.RowsAffected()
+	if n == 0 {
+		return ErrExpenseNotFound
+	}
+	return nil
 }

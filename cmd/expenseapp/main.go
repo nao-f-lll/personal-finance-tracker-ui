@@ -4,7 +4,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
-	"path/filepath"
+	"os"
 
 	"github.com/tanq16/expenseowl/internal/api"
 	"github.com/tanq16/expenseowl/internal/config"
@@ -14,12 +14,19 @@ import (
 
 func runServer(dataPath string) {
 	cfg := config.NewConfig(dataPath)
-	storage, err := storage.New(filepath.Join(cfg.StoragePath, "expenses.json"))
+
+	// Use environment variable or hardcoded connection string
+	connStr := os.Getenv("DATABASE_URL")
+	if connStr == "" {
+		connStr = "host=localhost port=5432 user=naoufal password=naoufal dbname=personal_finance_app_db sslmode=disable"
+	}
+
+	store, err := storage.NewPostgresStore(connStr)
 	if err != nil {
 		log.Fatalf("Failed to initialize storage: %v", err)
 	}
 
-	handler := api.NewHandler(storage, cfg)
+	handler := api.NewHandler(store, cfg)
 	http.HandleFunc("/categories", handler.GetCategories)
 	http.HandleFunc("/categories/edit", handler.EditCategories)
 	http.HandleFunc("/currency", handler.EditCurrency)
