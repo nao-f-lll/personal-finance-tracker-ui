@@ -96,8 +96,8 @@
 
     <script>
         const currencySymbols = {
-            "usd": "$",    // US Dollar
             "eur": "€",    // Euro
+            "usd": "$",    // US Dollar
             "gbp": "£",    // British Pound
             "jpy": "¥",    // Japanese Yen
             "cny": "¥",    // Chinese Yuan
@@ -394,15 +394,20 @@
                 }
                 const config = await response.json();
                 categories = [...config.categories];
-                currentCurrency = config.currency;
+                
+                // Set default currency to Euro if not provided
+                currentCurrency = config.currency || "€"; // Default to Euro symbol
                 currentStartDate = config.startDate;
-                let currentCurrencyCode = "eur"; // Default
+
+                // Determine the currency code based on the current currency symbol
+                let currentCurrencyCode = "eur"; // Default to Euro
                 for (const [code, symbol] of Object.entries(currencySymbols)) {
                     if (symbol === currentCurrency) {
                         currentCurrencyCode = code;
                         break;
                     }
                 }
+                
                 renderCategories();
                 populateCurrencySelect();
                 populateStartDateInput();
@@ -411,6 +416,7 @@
                 showMessage('categoriesMessage', 'No se pudo cargar la configuración', false);
             }
         }
+
 
         // Import functions
         async function handleFileUpload(e) {
