@@ -144,7 +144,7 @@
         }
 
         function formatCurrency(amount) {
-            let formattedAmount = new Intl.NumberFormat('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(amount);
+            let formattedAmount = new Intl.NumberFormat('es-ES', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(amount);
             // Currencies commonly used after the amount
             const postfixCurrencies = new Set(['kr', 'kr.', 'Fr', 'zł']);
             if (postfixCurrencies.has(currencySymbol)) {
