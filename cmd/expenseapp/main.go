@@ -34,11 +34,27 @@ func getGlobalBalance() float64 {
     return globalBalance
 }
 
-func getGlobalBalanceHandler(w http.ResponseWriter, r *http.Request) {
-    balance := getGlobalBalance()
-    response := map[string]float64{"global_balance": balance}
-    w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(response)
+func getGlobalBalanceHandler(store *storage.PostgresStore) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        totalIncome, err := store.GetTotalIncome()
+        if err != nil {
+            http.Error(w, "Error al obtener ingresos", http.StatusInternalServerError)
+            return
+        }
+        totalExpenses, err := store.GetTotalExpenses()
+        if err != nil {
+            http.Error(w, "Error al obtener gastos", http.StatusInternalServerError)
+            return
+        }
+        balance := totalIncome - totalExpenses
+        response := map[string]float64{
+            "total_income":   totalIncome,
+            "total_expenses": totalExpenses,
+            "global_balance": balance,
+        }
+        w.Header().Set("Content-Type", "application/json")
+        json.NewEncoder(w).Encode(response)
+    }
 }
 
 func runServer(dataPath string) {
@@ -74,7 +90,7 @@ func runServer(dataPath string) {
 	http.HandleFunc("/manifest.json", handler.ServeStaticFile)
 	http.HandleFunc("/sw.js", handler.ServeStaticFile)
 	http.HandleFunc("/pwa/", handler.ServeStaticFile)
-	http.HandleFunc("/global-balance", getGlobalBalanceHandler)
+	http.HandleFunc("/global-balance", getGlobalBalanceHandler(store))
 	http.HandleFunc("/style.css", handler.ServeStaticFile)
 	http.HandleFunc("/favicon.ico", handler.ServeStaticFile)
 	http.HandleFunc("/chart.min.js", handler.ServeStaticFile)
@@ -102,16 +118,4 @@ func main() {
 	dataPath := flag.String("data", "data", "Path to data directory")
 	flag.Parse()
 	runServer(*dataPath)
-}
-
-func addIncome(amount float64) {
-    // Lógica para añadir ingresos...
-    totalIncome += amount
-    updateGlobalBalance(totalIncome, totalExpenses)
-}
-
-func addExpense(amount float64) {
-    // Lógica para añadir gastos...
-    totalExpenses += amount
-    updateGlobalBalance(totalIncome, totalExpenses)
 }
