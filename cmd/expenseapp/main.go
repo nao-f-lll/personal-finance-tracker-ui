@@ -5,12 +5,41 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
+	"encoding/json"
+    "net/http"
 
 	"github.com/tanq16/expenseowl/internal/api"
 	"github.com/tanq16/expenseowl/internal/config"
 	"github.com/tanq16/expenseowl/internal/storage"
 	"github.com/tanq16/expenseowl/internal/web"
 )
+
+var (
+    globalBalance float64
+    mu            sync.Mutex
+)
+
+// Función para actualizar el balance global
+func updateGlobalBalance(totalIncome, totalExpenses float64) {
+    mu.Lock()
+    defer mu.Unlock()
+    globalBalance = totalIncome - totalExpenses
+}
+
+// Función para obtener el balance global
+func getGlobalBalance() float64 {
+    mu.Lock()
+    defer mu.Unlock()
+    return globalBalance
+}
+
+func getGlobalBalanceHandler(w http.ResponseWriter, r *http.Request) {
+    balance := getGlobalBalance()
+    response := map[string]float64{"global_balance": balance}
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(response)
+}
 
 func runServer(dataPath string) {
 	cfg := config.NewConfig(dataPath)
@@ -45,6 +74,7 @@ func runServer(dataPath string) {
 	http.HandleFunc("/manifest.json", handler.ServeStaticFile)
 	http.HandleFunc("/sw.js", handler.ServeStaticFile)
 	http.HandleFunc("/pwa/", handler.ServeStaticFile)
+	http.HandleFunc("/global-balance", getGlobalBalanceHandler)
 	http.HandleFunc("/style.css", handler.ServeStaticFile)
 	http.HandleFunc("/favicon.ico", handler.ServeStaticFile)
 	http.HandleFunc("/chart.min.js", handler.ServeStaticFile)
@@ -72,4 +102,16 @@ func main() {
 	dataPath := flag.String("data", "data", "Path to data directory")
 	flag.Parse()
 	runServer(*dataPath)
+}
+
+func addIncome(amount float64) {
+    // Lógica para añadir ingresos...
+    totalIncome += amount
+    updateGlobalBalance(totalIncome, totalExpenses)
+}
+
+func addExpense(amount float64) {
+    // Lógica para añadir gastos...
+    totalExpenses += amount
+    updateGlobalBalance(totalIncome, totalExpenses)
 }
