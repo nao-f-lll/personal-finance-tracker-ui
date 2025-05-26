@@ -17,8 +17,6 @@ type Storage interface {
 	GetAllExpenses() ([]*config.Expense, error)
 	DeleteExpense(id string) error
 	EditExpense(expense *config.Expense) error
-	GetTotalIncome() (float64, error)
-	GetTotalExpenses() (float64, error)
 }
 
 type postgresStore struct {
@@ -93,16 +91,4 @@ func (s *postgresStore) EditExpense(expense *config.Expense) error {
 		return ErrExpenseNotFound
 	}
 	return nil
-}
-
-func (s *postgresStore) GetTotalIncome() (float64, error) {
-	var total float64
-	err := s.db.QueryRow(`SELECT COALESCE(SUM(amount),0) FROM incomes`).Scan(&total)
-	return total, err
-}
-
-func (s *postgresStore) GetTotalExpenses() (float64, error) {
-	var total float64
-	err := s.db.QueryRow(`SELECT COALESCE(SUM(amount),0) FROM expenses`).Scan(&total)
-	return total, err
 }
