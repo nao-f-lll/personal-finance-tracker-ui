@@ -59,11 +59,6 @@
             </div>
         </div>
 
-        <div id="globalBalance" class="cashflow-item balance">
-            <div class="cashflow-label">Saldo Global</div>
-            <div class="cashflow-value" id="globalBalanceValue"></div>
-        </div>
-
         <div id="cashflow-section" class="cashflow-container" style="display: none;">
             <div class="cashflow-item income">
                 <div class="cashflow-label">Ingresos</div>
@@ -428,33 +423,6 @@
             const submitButton = form.querySelector('button[type="submit"]');
             submitButton.textContent = 'Update Expense';
         }
-
-        async function fetchGlobalBalance() {
-            try {
-                const response = await fetch('/global-balance');
-                if (!response.ok) throw new Error('Failed to fetch global balance');
-                const data = await response.json();
-                const globalBalance = data.global_balance;
-
-                // Actualizar el DOM
-                const globalBalanceValue = document.getElementById('globalBalanceValue');
-                globalBalanceValue.textContent = formatCurrency(globalBalance);
-
-                // Añadir clases para positivo/negativo
-                if (globalBalance >= 0) {
-                    globalBalanceValue.classList.add('positive');
-                    globalBalanceValue.classList.remove('negative');
-                } else {
-                    globalBalanceValue.classList.add('negative');
-                    globalBalanceValue.classList.remove('positive');
-                }
-            } catch (error) {
-                console.error('Error fetching global balance:', error);
-            }
-        }
-
-        // Llama a la función al cargar la página
-        document.addEventListener('DOMContentLoaded', fetchGlobalBalance);
 
         async function initialize() {
             try {
