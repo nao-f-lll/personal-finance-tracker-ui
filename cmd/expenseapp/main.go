@@ -49,8 +49,6 @@ func runServer(dataPath string) {
 	http.HandleFunc("/favicon.ico", handler.ServeStaticFile)
 	http.HandleFunc("/chart.min.js", handler.ServeStaticFile)
 	http.HandleFunc("/fa.min.css", handler.ServeStaticFile)
-	http.HandleFunc("/global-money", handler.GetGlobalMoney)
-	http.HandleFunc("/global-money/update", handler.UpdateGlobalMoney)
 	http.HandleFunc("/webfonts/", handler.ServeStaticFile)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
@@ -75,5 +73,3 @@ func main() {
 	flag.Parse()
 	runServer(*dataPath)
 }
-
-

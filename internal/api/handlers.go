@@ -282,30 +282,6 @@ func (h *Handler) ServeStaticFile(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) GetGlobalMoney(w http.ResponseWriter, r *http.Request) {
-    amount, err := h.store.GetGlobalMoney()
-    if err != nil {
-        http.Error(w, "Failed to get global money", http.StatusInternalServerError)
-        return
-    }
-    json.NewEncoder(w).Encode(map[string]float64{"amount": amount})
-}
-
-func (h *Handler) UpdateGlobalMoney(w http.ResponseWriter, r *http.Request) {
-    var req struct {
-        Amount float64 `json:"amount"`
-    }
-    if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-        http.Error(w, "Invalid request body", http.StatusBadRequest)
-        return
-    }
-    if err := h.store.UpdateGlobalMoney(req.Amount); err != nil {
-        http.Error(w, "Failed to update global money", http.StatusInternalServerError)
-        return
-    }
-    w.WriteHeader(http.StatusOK)
-}
-
 func writeJSON(w http.ResponseWriter, status int, v interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
