@@ -1,12 +1,13 @@
 package main
 
 import (
-	"database/sql"
-	"encoding/json"
 	"flag"
 	"log"
 	"net/http"
 	"os"
+	"sync"
+	"encoding/json"
+    "net/http"
 
 	"github.com/tanq16/expenseowl/internal/api"
 	"github.com/tanq16/expenseowl/internal/config"
@@ -14,28 +15,46 @@ import (
 	"github.com/tanq16/expenseowl/internal/web"
 )
 
-// Handler para balance global calculado en tiempo real desde la base de datos
+var (
+    globalBalance float64
+    mu            sync.Mutex
+)
+
+// Función para actualizar el balance global
+func updateGlobalBalance(totalIncome, totalExpenses float64) {
+    mu.Lock()
+    defer mu.Unlock()
+    globalBalance = totalIncome - totalExpenses
+}
+
+// Función para obtener el balance global
+func getGlobalBalance() float64 {
+    mu.Lock()
+    defer mu.Unlock()
+    return globalBalance
+}
+
 func getGlobalBalanceHandler(store *storage.PostgresStore) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		totalIncome, err := store.GetTotalIncome()
-		if err != nil {
-			http.Error(w, "Error al obtener ingresos", http.StatusInternalServerError)
-			return
-		}
-		totalExpenses, err := store.GetTotalExpenses()
-		if err != nil {
-			http.Error(w, "Error al obtener gastos", http.StatusInternalServerError)
-			return
-		}
-		balance := totalIncome - totalExpenses
-		response := map[string]float64{
-			"total_income":   totalIncome,
-			"total_expenses": totalExpenses,
-			"global_balance": balance,
-		}
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
-	}
+    return func(w http.ResponseWriter, r *http.Request) {
+        totalIncome, err := store.GetTotalIncome()
+        if err != nil {
+            http.Error(w, "Error al obtener ingresos", http.StatusInternalServerError)
+            return
+        }
+        totalExpenses, err := store.GetTotalExpenses()
+        if err != nil {
+            http.Error(w, "Error al obtener gastos", http.StatusInternalServerError)
+            return
+        }
+        balance := totalIncome - totalExpenses
+        response := map[string]float64{
+            "total_income":   totalIncome,
+            "total_expenses": totalExpenses,
+            "global_balance": balance,
+        }
+        w.Header().Set("Content-Type", "application/json")
+        json.NewEncoder(w).Encode(response)
+    }
 }
 
 func runServer(dataPath string) {
@@ -100,5 +119,3 @@ func main() {
 	flag.Parse()
 	runServer(*dataPath)
 }
-
-
