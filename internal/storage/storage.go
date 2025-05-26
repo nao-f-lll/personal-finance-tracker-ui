@@ -32,6 +32,27 @@ func NewPostgresStore(connStr string) (*postgresStore, error) {
 		return nil, err
 	}
 	return &postgresStore{db: db}, nil
+
+	if err := store.CreateGlobalMoneyTable(); err != nil {
+        return nil, err
+    }
+
+	// Inicializar el dinero global si no existe
+    if err := store.InitializeGlobalMoney(); err != nil {
+        return nil, err
+    }
+
+    return store, nil
+}
+
+func (s *postgresStore) CreateGlobalMoneyTable() error {
+    query := `
+    CREATE TABLE IF NOT EXISTS global_money (
+        id SERIAL PRIMARY KEY,
+        amount NUMERIC(15, 2) NOT NULL DEFAULT 0
+    )`
+    _, err := s.db.Exec(query)
+    return err
 }
 
 func (s *postgresStore) SaveExpense(expense *config.Expense) error {
@@ -46,6 +67,22 @@ func (s *postgresStore) SaveExpense(expense *config.Expense) error {
 		expense.ID, expense.Name, expense.Category, expense.Amount, expense.Date,
 	)
 	return err
+}
+
+func (s *postgresStore) InitializeGlobalMoney() error {
+    var count int
+    err := s.db.QueryRow(`SELECT COUNT(*) FROM global_money`).Scan(&count)
+    if err != nil {
+        return err
+    }
+
+    if count == 0 {
+        _, err := s.db.Exec(`INSERT INTO global_money (amount) VALUES (0)`)
+        if err != nil {
+            return err
+        }
+    }
+    return nil
 }
 
 func (s *postgresStore) GetAllExpenses() ([]*config.Expense, error) {

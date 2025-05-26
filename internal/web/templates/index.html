@@ -223,6 +223,34 @@
             }
         }
 
+        async function fetchGlobalMoney() {
+            const response = await fetch('/global-money');
+            const data = await response.json();
+            document.getElementById('globalMoneyValue').textContent = formatCurrency(data.amount);
+        }
+
+        async function updateGlobalMoney(amount) {
+            await fetch('/global-money/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount })
+            });
+        }
+
+        // Llama a fetchGlobalMoney al cargar la página
+        fetchGlobalMoney();
+
+        // Actualiza el dinero global al añadir un gasto
+        document.getElementById('expenseForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('amount').value);
+            const response = await fetch('/global-money');
+            const data = await response.json();
+            const newAmount = data.amount - amount;
+            await updateGlobalMoney(newAmount);
+            fetchGlobalMoney();
+        });
+
         function createPieChart(categoryData) {
             if (pieChart) pieChart.destroy();
             pieChart = new Chart('categoryPieChart', {
