@@ -5,23 +5,17 @@
 <h1 align="center">PersonalFinanceTracker</h1><br>
 
 <p align="center">
-<a href="#por-qué-crear-esto">¿Por qué crear esto?</a>&nbsp;&bull;&nbsp;<a href="#características">Características</a><br>
-<a href="#instalación">Instalación</a>&nbsp;&bull;&nbsp;<a href="#uso">Uso</a>&nbsp;&bull;&nbsp;<a href="#stack-tecnológico">Stack tecnológico</a>
+<a href="#características">Características</a>&nbsp;&bull;&nbsp;<a href="#instalación">Instalación</a><br>
+<a href="#uso">Uso</a>&nbsp;&bull;&nbsp;<a href="#stack-tecnológico">Stack tecnológico</a>
 </p>
 
 <br>
 
 <p align="center">
-<b>PersonalFinanceTracker</b> es un sistema de seguimiento de gastos extremadamente simple, autoalojado, con una visualización moderna de gráfico circular mensual y muestra de flujo de caja.
+<b>PersonalFinanceTracker</b> es un sistema de seguimiento de gastos extremadamente simple, auto alojado, con una visualización moderna de gráfico circular mensual y muestra de flujo de caja.
 </p>
 
 <br>
-
-# Por qué crear esto?
-
-Hay una gran cantidad de proyectos increíbles para el seguimiento de gastos en GitHub ([Actual](https://github.com/actualbudget/actual), [Firefly III](https://github.com/firefly-iii/firefly-iii), etc.). ¡Todos son realmente increíbles! Simplemente encuentro que no son los *más rápidos* o *más simples* para agregar gastos. También ofrecen demasiadas funciones que nunca uso (como formatos de datos variables o presupuestos complejos). *No me malinterpreten*, son increíbles cuando se necesita complejidad, pero quería algo ***extremadamente simple*** que solo me diera un rápido gráfico circular mensual y una representación tabular. ¡NADA más!
-
-Por eso creé este proyecto y lo uso en mi laboratorio doméstico para mi seguimiento de gastos. La intención es rastrear los gastos en tus categorías de manera simplista. Sin búsquedas o ediciones complicadas - ¡solo `agregar`, `eliminar` y `ver`! Esta intención no cambiará durante el ciclo de vida del proyecto. Esta *no* es una aplicación para presupuestar; es para un seguimiento sencillo.
 
 # Características
 
